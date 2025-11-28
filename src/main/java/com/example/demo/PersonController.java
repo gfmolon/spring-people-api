@@ -20,7 +20,7 @@ public class PersonController {
         return service.listAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")  // soma o que esta em cima (RequestMapping)
     public ResponseEntity<Person> getOne(@PathVariable Integer id) {
         try {
             Person person = service.getOne(id);
