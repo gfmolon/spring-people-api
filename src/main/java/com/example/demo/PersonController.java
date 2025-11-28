@@ -39,4 +39,30 @@ public class PersonController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Person> update(
+            @PathVariable Integer id,
+            @RequestBody Person dto) {
+
+        try {
+            Person updated = service.update(id, dto);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

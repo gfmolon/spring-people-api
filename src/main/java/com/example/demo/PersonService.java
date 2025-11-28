@@ -33,4 +33,21 @@ public class PersonService {
 
         return repository.save(person);
     }
+
+   // DELETAR UMA PESSOA 
+    public void delete(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("ID não encontrado!");
+        }
+        repository.deleteById(id);
+    }
+
+    //ATUALIZAR PESSOA
+    public Person update(Integer id, Person nova) {
+        Person atual = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Não encontrado"));
+        atual.setName(nova.getName());
+        return repository.save(atual);
+    }
+
 }
