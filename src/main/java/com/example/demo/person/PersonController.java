@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.person;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,31 +15,35 @@ public class PersonController {
         this.service = service;
     }
 
+    // GET /people  -> lista todas as pessoas (já em DTO de resposta)
     @GetMapping
-    public List<Person> listAll() {
+    public List<PersonResponseDTO> listAll() {
         return service.listAll();
     }
 
-    @GetMapping("/{id}")  // soma o que esta em cima (RequestMapping)
-    public ResponseEntity<Person> getOne(@PathVariable Integer id) {
+    // GET /people/{id} -> retorna 1 pessoa pelo id
+    @GetMapping("/{id}")  // soma com o /people do @RequestMapping
+    public ResponseEntity<PersonResponseDTO> getOne(@PathVariable Integer id) {
         try {
-            Person person = service.getOne(id);
+            PersonResponseDTO person = service.getOne(id);
             return ResponseEntity.ok(person);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+    // POST /people -> cria uma nova pessoa a partir do DTO de entrada
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Person person) {
+    public ResponseEntity<?> create(@RequestBody PersonRequestDTO dto) {
         try {
-            Person saved = service.create(person);
+            PersonResponseDTO saved = service.create(dto);
             return ResponseEntity.status(201).body(saved);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    // DELETE /people/{id} -> remove a pessoa
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         try {
@@ -50,19 +54,17 @@ public class PersonController {
         }
     }
 
-    
+    // PUT /people/{id} -> atualiza name/city da pessoa
     @PutMapping("/{id}")
-    public ResponseEntity<Person> update(
+    public ResponseEntity<PersonResponseDTO> update(
             @PathVariable Integer id,
-            @RequestBody Person dto) {
+            @RequestBody PersonRequestDTO dto) {
 
         try {
-            Person updated = service.update(id, dto);
+            PersonResponseDTO updated = service.update(id, dto);
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }
